@@ -79,7 +79,7 @@ h2 {
   border-radius: 20px;
   min-height: 260px;
   padding: 20px;
-  font-size: 25px;
+  font-size: 24px;
   font-weight: bold;
   display: flex;
   align-items: center;
@@ -97,7 +97,7 @@ h2 {
 }
 
 #toyPreview {
-  height: 300px;
+  height: 320px;
   background: #f1faee;
   color: #111;
   border-radius: 24px;
@@ -108,55 +108,185 @@ h2 {
   font-size: 120px;
   margin-bottom: 18px;
   position: relative;
+  overflow: hidden;
 }
 
-.carToy {
-  width: 260px;
-  height: 120px;
-  border-radius: 35px 60px 25px 25px;
+/* 자동차 조립 그림 */
+.carStage {
+  width: 300px;
+  height: 180px;
   position: relative;
-  background: var(--car-color);
-  border: 6px solid #111;
 }
 
-.carToy::before {
-  content: "";
+.carPart {
   position: absolute;
-  width: 95px;
-  height: 45px;
+  opacity: 0.18;
+  transition: 0.25s;
+}
+
+.carPart.on {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.carPlatform {
+  width: 285px;
+  height: 24px;
+  background: #222;
+  left: 8px;
+  bottom: 35px;
+  border-radius: 20px;
+}
+
+.carBody {
+  width: 230px;
+  height: 95px;
+  background: var(--car-color);
+  left: 35px;
+  bottom: 55px;
+  border: 6px solid #111;
+  border-radius: 45px 70px 28px 28px;
+}
+
+.carWindow {
+  width: 92px;
+  height: 42px;
   background: #caf0f8;
   border: 5px solid #111;
-  border-radius: 28px 28px 8px 8px;
-  left: 80px;
-  top: -42px;
+  border-radius: 25px 25px 8px 8px;
+  left: 105px;
+  bottom: 125px;
 }
 
-.carToy::after {
-  content: "";
-  position: absolute;
-  width: 280px;
-  height: 12px;
+.carWheel {
+  width: 54px;
+  height: 54px;
   background: #111;
-  left: -10px;
-  bottom: -6px;
-  border-radius: 10px;
-}
-
-.wheel {
-  position: absolute;
-  width: 52px;
-  height: 52px;
-  background: #111;
-  border-radius: 50%;
-  bottom: -30px;
   border: 8px solid #777;
+  border-radius: 50%;
+  bottom: 18px;
 }
 
-.wheel.left { left: 35px; }
-.wheel.right { right: 35px; }
+.carWheel.left {
+  left: 58px;
+}
 
-.dollToy {
-  font-size: 140px;
+.carWheel.right {
+  right: 58px;
+}
+
+.carLight {
+  width: 32px;
+  height: 24px;
+  background: #fff176;
+  border: 4px solid #111;
+  border-radius: 50%;
+  right: 38px;
+  bottom: 85px;
+}
+
+.carSiren {
+  width: 58px;
+  height: 32px;
+  background: linear-gradient(90deg, red, blue);
+  border: 4px solid #111;
+  border-radius: 15px;
+  left: 122px;
+  bottom: 160px;
+}
+
+.carSticker {
+  position: absolute;
+  font-size: 42px;
+  left: 125px;
+  bottom: 76px;
+}
+
+.carDoor {
+  width: 48px;
+  height: 60px;
+  border: 5px solid #111;
+  background: rgba(255,255,255,0.25);
+  left: 122px;
+  bottom: 61px;
+}
+
+/* 인형 조립 그림 */
+.dollStage {
+  width: 250px;
+  height: 280px;
+  position: relative;
+}
+
+.dollPart {
+  position: absolute;
+  opacity: 0.18;
+  transition: 0.25s;
+}
+
+.dollPart.on {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.dollFace {
+  font-size: 76px;
+  left: 86px;
+  top: 15px;
+}
+
+.dollHair {
+  font-size: 70px;
+  left: 84px;
+  top: -2px;
+}
+
+.dollBody {
+  font-size: 95px;
+  left: 78px;
+  top: 92px;
+}
+
+.dollArm {
+  font-size: 55px;
+  left: 42px;
+  top: 112px;
+}
+
+.dollLeg {
+  font-size: 55px;
+  left: 100px;
+  top: 205px;
+}
+
+.dollDress {
+  font-size: 90px;
+  left: 80px;
+  top: 105px;
+}
+
+.dollShoes {
+  font-size: 48px;
+  left: 95px;
+  top: 225px;
+}
+
+.dollCrown {
+  font-size: 52px;
+  left: 100px;
+  top: -10px;
+}
+
+.dollEar {
+  font-size: 45px;
+  left: 48px;
+  top: 58px;
+}
+
+.dollRibbon {
+  font-size: 48px;
+  right: 48px;
+  top: 58px;
 }
 
 #buildStatus {
@@ -192,16 +322,29 @@ h2 {
 }
 
 .partBtn {
-  height: 95px;
+  height: 88px;
   border-radius: 20px;
   border: none;
   background: #f1faee;
-  font-size: 24px;
+  font-size: 23px;
   font-weight: bold;
 }
 
 .partBtn.done {
   background: #80ed99;
+}
+
+.partBtn.wrong {
+  background: #ff8a80;
+  animation: wrongShake 0.25s;
+}
+
+@keyframes wrongShake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  50% { transform: translateX(8px); }
+  75% { transform: translateX(-8px); }
+  100% { transform: translateX(0); }
 }
 
 footer {
