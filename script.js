@@ -20,7 +20,6 @@ const orders = [
   {
     type: "car",
     name: "국산 SUV 장난감",
-    model: "Family SUV",
     color: "#1e88e5",
     request: "파란색 국산 SUV를 만들어주세요!",
     parts: ["플랫폼", "차체", "바퀴", "창문", "라이트"]
@@ -28,7 +27,6 @@ const orders = [
   {
     type: "car",
     name: "국산 세단 장난감",
-    model: "City Sedan",
     color: "#e53935",
     request: "빨간색 국산 세단을 만들어주세요!",
     parts: ["플랫폼", "차체", "바퀴", "창문", "라이트"]
@@ -36,7 +34,6 @@ const orders = [
   {
     type: "car",
     name: "국산 경찰차 장난감",
-    model: "Police Car",
     color: "#ffffff",
     request: "경찰차 장난감을 만들어주세요!",
     parts: ["플랫폼", "차체", "바퀴", "사이렌", "스티커"]
@@ -44,7 +41,6 @@ const orders = [
   {
     type: "car",
     name: "국산 버스 장난감",
-    model: "City Bus",
     color: "#ffca28",
     request: "노란색 버스 장난감을 만들어주세요!",
     parts: ["플랫폼", "차체", "바퀴", "창문", "문"]
@@ -52,28 +48,25 @@ const orders = [
   {
     type: "doll",
     name: "말하는 아기 인형",
-    model: "Talking Baby",
     request: "말하는 아기 인형을 만들어주세요!",
-    emoji: "👶",
     parts: ["얼굴", "몸통", "팔", "다리", "옷"]
   },
   {
     type: "doll",
     name: "공주 인형",
-    model: "Princess Doll",
     request: "반짝이는 공주 인형을 만들어주세요!",
-    emoji: "👸",
     parts: ["얼굴", "머리", "드레스", "신발", "왕관"]
   },
   {
     type: "doll",
     name: "동물 친구 인형",
-    model: "Animal Friend",
     request: "귀여운 동물 친구 인형을 만들어주세요!",
-    emoji: "🐻",
     parts: ["얼굴", "몸통", "귀", "팔", "리본"]
   }
 ];
+
+const allCarParts = ["플랫폼", "차체", "바퀴", "창문", "라이트", "사이렌", "스티커", "문", "날개", "프로펠러"];
+const allDollParts = ["얼굴", "몸통", "팔", "다리", "옷", "머리", "드레스", "신발", "왕관", "귀", "리본", "바퀴", "사이렌"];
 
 const partIcons = {
   "플랫폼": "🧱",
@@ -84,6 +77,8 @@ const partIcons = {
   "사이렌": "🚨",
   "스티커": "⭐",
   "문": "🚪",
+  "날개": "🪽",
+  "프로펠러": "🌀",
   "얼굴": "😊",
   "몸통": "🧸",
   "팔": "💪",
@@ -109,20 +104,30 @@ function makeNewOrder() {
   packed = false;
 
   orderCard.textContent =
-    `주문서\n\n${currentOrder.request}\n\n제품: ${currentOrder.name}`;
+    `주문서\n\n${currentOrder.request}\n\n필요 부품 ${currentOrder.parts.length}개`;
 
-  buildStatus.textContent = "부품을 하나씩 눌러 조립하세요!";
-  message.textContent = "부품 창고에서 필요한 부품을 눌러주세요.";
+  buildStatus.textContent = "부품 창고에는 필요 없는 부품도 있어요. 잘 골라주세요!";
+  message.textContent = "주문서를 보고 필요한 부품만 골라 조립하세요.";
   progressFill.style.width = "0%";
 
-  drawPreview(false);
-  makePartButtons();
+  drawPreview();
+  makeMixedPartButtons();
 }
 
-function makePartButtons() {
+function makeMixedPartButtons() {
   partsButtons.innerHTML = "";
 
-  currentOrder.parts.forEach(part => {
+  const pool = currentOrder.type === "car" ? allCarParts : allDollParts;
+  const wrongParts = pool.filter(part => !currentOrder.parts.includes(part));
+
+  const mixed = [...currentOrder.parts];
+
+  while (mixed.length < 8 && wrongParts.length > 0) {
+    const randomWrong = wrongParts.splice(Math.floor(Math.random() * wrongParts.length), 1)[0];
+    mixed.push(randomWrong);
+  }
+
+  shuffle(mixed).forEach(part => {
     const btn = document.createElement("button");
     btn.className = "partBtn";
     btn.innerHTML = `${partIcons[part] || "🔧"}<br>${part}`;
@@ -137,6 +142,13 @@ function assemblePart(part, btn) {
     return;
   }
 
+  if (!currentOrder.parts.includes(part)) {
+    message.textContent = `❌ ${part}은/는 이번 주문에 필요 없는 부품이에요!`;
+    btn.classList.add("wrong");
+    setTimeout(() => btn.classList.remove("wrong"), 400);
+    return;
+  }
+
   if (assembledParts.includes(part)) {
     message.textContent = `${part} 부품은 이미 조립했어요.`;
     return;
@@ -145,20 +157,21 @@ function assemblePart(part, btn) {
   assembledParts.push(part);
   btn.classList.add("done");
 
+  turnOnPart(part);
+
   const percent = Math.round((assembledParts.length / currentOrder.parts.length) * 100);
   progressFill.style.width = percent + "%";
 
   buildStatus.textContent = `${part} 조립 완료! (${assembledParts.length}/${currentOrder.parts.length})`;
 
   if (assembledParts.length === currentOrder.parts.length) {
-    drawPreview(true);
     message.textContent = "조립 완료! 이제 검사 버튼을 눌러주세요.";
   } else {
-    message.textContent = "좋아요! 다음 부품도 조립해주세요.";
+    message.textContent = "좋아요! 장난감에 부품이 붙었어요. 다음 부품을 골라주세요.";
   }
 }
 
-function drawPreview(complete) {
+function drawPreview() {
   toyPreview.innerHTML = "";
 
   if (!currentOrder) {
@@ -167,34 +180,48 @@ function drawPreview(complete) {
   }
 
   if (currentOrder.type === "car") {
-    const car = document.createElement("div");
-    car.className = "carToy";
-    car.style.setProperty("--car-color", currentOrder.color);
+    const stage = document.createElement("div");
+    stage.className = "carStage";
+    stage.style.setProperty("--car-color", currentOrder.color);
 
-    const w1 = document.createElement("div");
-    w1.className = "wheel left";
-    const w2 = document.createElement("div");
-    w2.className = "wheel right";
+    stage.innerHTML = `
+      <div class="carPart carPlatform" data-part="플랫폼"></div>
+      <div class="carPart carBody" data-part="차체"></div>
+      <div class="carPart carWindow" data-part="창문"></div>
+      <div class="carPart carWheel left" data-part="바퀴"></div>
+      <div class="carPart carWheel right" data-part="바퀴"></div>
+      <div class="carPart carLight" data-part="라이트"></div>
+      <div class="carPart carSiren" data-part="사이렌"></div>
+      <div class="carPart carSticker" data-part="스티커">⭐</div>
+      <div class="carPart carDoor" data-part="문"></div>
+    `;
 
-    car.appendChild(w1);
-    car.appendChild(w2);
-
-    if (!complete) {
-      car.style.opacity = "0.45";
-    }
-
-    toyPreview.appendChild(car);
+    toyPreview.appendChild(stage);
   } else {
-    const doll = document.createElement("div");
-    doll.className = "dollToy";
-    doll.textContent = currentOrder.emoji;
+    const stage = document.createElement("div");
+    stage.className = "dollStage";
 
-    if (!complete) {
-      doll.style.opacity = "0.45";
-    }
+    stage.innerHTML = `
+      <div class="dollPart dollHair" data-part="머리">💇</div>
+      <div class="dollPart dollCrown" data-part="왕관">👑</div>
+      <div class="dollPart dollFace" data-part="얼굴">😊</div>
+      <div class="dollPart dollEar" data-part="귀">👂</div>
+      <div class="dollPart dollRibbon" data-part="리본">🎀</div>
+      <div class="dollPart dollBody" data-part="몸통">🧸</div>
+      <div class="dollPart dollArm" data-part="팔">💪</div>
+      <div class="dollPart dollLeg" data-part="다리">🦵</div>
+      <div class="dollPart dollDress" data-part="드레스">👗</div>
+      <div class="dollPart dollShoes" data-part="신발">👟</div>
+      <div class="dollPart dollDress" data-part="옷">👕</div>
+    `;
 
-    toyPreview.appendChild(doll);
+    toyPreview.appendChild(stage);
   }
+}
+
+function turnOnPart(part) {
+  const parts = toyPreview.querySelectorAll(`[data-part="${part}"]`);
+  parts.forEach(p => p.classList.add("on"));
 }
 
 function inspectToy() {
@@ -204,12 +231,12 @@ function inspectToy() {
   }
 
   if (assembledParts.length !== currentOrder.parts.length) {
-    message.textContent = "아직 조립이 끝나지 않았어요!";
+    message.textContent = "아직 필요한 부품이 다 조립되지 않았어요!";
     return;
   }
 
   inspected = true;
-  message.textContent = "🔍 검사 완료! 장난감이 아주 잘 만들어졌어요.";
+  message.textContent = "🔍 검사 완료! 주문서와 부품이 정확히 맞아요.";
 }
 
 function packToy() {
@@ -240,4 +267,8 @@ function shipToy() {
   progressFill.style.width = "100%";
 
   currentOrder = null;
+}
+
+function shuffle(array) {
+  return array.sort(() => Math.random() - 0.5);
 }
