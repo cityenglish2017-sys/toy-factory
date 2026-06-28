@@ -1,0 +1,243 @@
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #1b263b;
+  color: white;
+  overflow: hidden;
+}
+
+#game {
+  width: 100vw;
+  height: 100vh;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+header {
+  height: 70px;
+  background: #ffb703;
+  color: #111;
+  border: 5px solid white;
+  border-radius: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 34px;
+}
+
+#scoreBox {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 28% 40% 32%;
+  gap: 10px;
+}
+
+section {
+  border: 5px solid white;
+  border-radius: 24px;
+  padding: 16px;
+}
+
+#orderPanel {
+  background: #2a9d8f;
+}
+
+#factory {
+  background: #264653;
+  text-align: center;
+}
+
+#partsPanel {
+  background: #457b9d;
+}
+
+h2 {
+  margin: 0 0 14px;
+  font-size: 28px;
+}
+
+#orderCard {
+  background: white;
+  color: #111;
+  border-radius: 20px;
+  min-height: 260px;
+  padding: 20px;
+  font-size: 25px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  white-space: pre-line;
+}
+
+#newOrderBtn {
+  margin-top: 18px;
+  width: 100%;
+  height: 80px;
+  font-size: 28px;
+  background: #ffd166;
+}
+
+#toyPreview {
+  height: 300px;
+  background: #f1faee;
+  color: #111;
+  border-radius: 24px;
+  border: 6px dashed #ffb703;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 120px;
+  margin-bottom: 18px;
+  position: relative;
+}
+
+.carToy {
+  width: 260px;
+  height: 120px;
+  border-radius: 35px 60px 25px 25px;
+  position: relative;
+  background: var(--car-color);
+  border: 6px solid #111;
+}
+
+.carToy::before {
+  content: "";
+  position: absolute;
+  width: 95px;
+  height: 45px;
+  background: #caf0f8;
+  border: 5px solid #111;
+  border-radius: 28px 28px 8px 8px;
+  left: 80px;
+  top: -42px;
+}
+
+.carToy::after {
+  content: "";
+  position: absolute;
+  width: 280px;
+  height: 12px;
+  background: #111;
+  left: -10px;
+  bottom: -6px;
+  border-radius: 10px;
+}
+
+.wheel {
+  position: absolute;
+  width: 52px;
+  height: 52px;
+  background: #111;
+  border-radius: 50%;
+  bottom: -30px;
+  border: 8px solid #777;
+}
+
+.wheel.left { left: 35px; }
+.wheel.right { right: 35px; }
+
+.dollToy {
+  font-size: 140px;
+}
+
+#buildStatus {
+  background: white;
+  color: #111;
+  min-height: 60px;
+  border-radius: 16px;
+  padding: 12px;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+#progressBar {
+  height: 30px;
+  background: #111;
+  border-radius: 20px;
+  margin-top: 16px;
+  overflow: hidden;
+  border: 3px solid white;
+}
+
+#progressFill {
+  height: 100%;
+  width: 0%;
+  background: #80ed99;
+  transition: 0.3s;
+}
+
+#partsButtons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.partBtn {
+  height: 95px;
+  border-radius: 20px;
+  border: none;
+  background: #f1faee;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.partBtn.done {
+  background: #80ed99;
+}
+
+footer {
+  height: 85px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+footer button {
+  font-size: 28px;
+  border-radius: 22px;
+  border: 4px solid white;
+  font-weight: bold;
+  background: #ffd166;
+}
+
+button {
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+#message {
+  min-height: 58px;
+  background: white;
+  color: #111;
+  border-radius: 18px;
+  border: 4px solid #ffb703;
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}

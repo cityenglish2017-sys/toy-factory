@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Owen Toy Factory</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="game">
+    <header>
+      <h1>🏭 Owen Toy Factory</h1>
+      <div id="scoreBox">완성한 장난감 ⭐ <span id="score">0</span></div>
+    </header>
+
+    <main>
+      <section id="orderPanel">
+        <h2>📦 주문 접수</h2>
+        <div id="orderCard">새 주문을 받아주세요!</div>
+        <button id="newOrderBtn">📞 주문 받기</button>
+      </section>
+
+      <section id="factory">
+        <h2>🔧 조립 라인</h2>
+        <div id="toyPreview">❓</div>
+        <div id="buildStatus">부품을 순서대로 조립하세요.</div>
+        <div id="progressBar">
+          <div id="progressFill"></div>
+        </div>
+      </section>
+
+      <section id="partsPanel">
+        <h2>🧩 부품 창고</h2>
+        <div id="partsButtons"></div>
+      </section>
+    </main>
+
+    <footer>
+      <button id="inspectBtn">🔍 검사하기</button>
+      <button id="packBtn">🎁 포장하기</button>
+      <button id="shipBtn">🚚 출고하기</button>
+    </footer>
+
+    <div id="message">주문을 받고 장난감을 만들어보세요!</div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
